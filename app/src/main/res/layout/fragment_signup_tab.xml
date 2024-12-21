@@ -33,7 +33,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Signup"
+                    android:text="SignUp"
                     android:id="@+id/signText"
                     android:textSize="36sp"
                     android:textAlignment="center"
@@ -42,8 +42,8 @@
 
                 <EditText
                     android:id="@+id/signup_email"
-                    android:layout_width="300dp"
-                    android:layout_height="60dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/edittext_bkg"
@@ -54,8 +54,8 @@
 
                 <EditText
                     android:id="@+id/signup_password"
-                    android:layout_width="300dp"
-                    android:layout_height="60dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/edittext_bkg"
@@ -67,8 +67,8 @@
 
                 <EditText
                     android:id="@+id/signup_confirm"
-                    android:layout_width="300dp"
-                    android:layout_height="60dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/edittext_bkg"

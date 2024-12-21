@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "967952003325",
+    "project_id": "concertapp-99189",
+    "storage_bucket": "concertapp-99189.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967952003325:android:922b98d464bca51b054e94",
+        "android_client_info": {
+          "package_name": "com.example.concertapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWg0ZH8WWPTa_1KqrZIGqViGEP6pEs3Xw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -69,16 +69,14 @@
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/lavender"/>
 
-            <TextView
+            <Button
+                android:id="@+id/signup_redirect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Don't have an account? Sign Up"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:id="@+id/signup_text"
-                android:layout_gravity="center" />
-
+                android:padding="8dp"
+                android:text="Don't have an account? Sign up"
+                android:textColor="@color/lavender"
+                android:background="@android:color/transparent" />
 
         </LinearLayout>
 

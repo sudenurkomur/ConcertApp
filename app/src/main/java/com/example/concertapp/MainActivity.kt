@@ -10,17 +10,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Splash Screen kurulumunu doğru şekilde yapıyoruz.
+        // Splash Screen kurulumunu
         val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition { false } // Gerekirse koşul belirtebilirsiniz.
+        splashScreen.setKeepOnScreenCondition { false }
 
         super.onCreate(savedInstanceState)
 
-        // View Binding ile ana düzenimizi bağlıyoruz.
+        // View Binding ile ana düzeni
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Fragment'ı ekliyoruz
+        // Fragment ekleme
         if (savedInstanceState == null) {
             val loginFragment = LoginFragment()
             supportFragmentManager.beginTransaction()

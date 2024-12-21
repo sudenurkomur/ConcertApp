@@ -17,13 +17,12 @@ class AdminFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Binding'i başlatıyoruz
         _binding = FragmentAdminBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Binding'i sıfırlıyoruz
+        _binding = null
     }
 }

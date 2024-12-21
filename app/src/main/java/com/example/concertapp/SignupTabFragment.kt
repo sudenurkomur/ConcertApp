@@ -28,10 +28,8 @@ class SignupTabFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Firebase Auth'u başlat
         auth = FirebaseAuth.getInstance()
 
-        // Signup butonunun tıklama olayını tanımlıyoruz
         binding.signupButton.setOnClickListener {
             val email = binding.signupEmail.text.toString().trim()
             val password = binding.signupPassword.text.toString().trim()
@@ -71,6 +69,6 @@ class SignupTabFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Binding'i sıfırlayın
+        _binding = null
     }
 }

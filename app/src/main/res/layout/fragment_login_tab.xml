@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Don't have an account? Sign up"
+                android:text="      Don't have an account? Sign up"
                 android:textColor="@color/lavender"
                 android:background="@android:color/transparent" />
 

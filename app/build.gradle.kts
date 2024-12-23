@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

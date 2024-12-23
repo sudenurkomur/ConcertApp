@@ -16,6 +16,7 @@ firebaseAuthKtx = "23.1.0"
 coreSplashscreen = "1.0.1"
 material = "1.12.0"
 navigationFragment = "2.8.5"
+firebaseStorageKtx = "21.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +40,7 @@ firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx",
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -5,18 +5,18 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.drawerlayout.widget.DrawerLayout
-import com.example.concertapp.R
-import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.example.concertapp.AddActivity
-import com.example.concertapp.AddFragment
+import com.example.concertapp.HomeActivity
 import com.example.concertapp.LoginFragment
-import com.example.concertapp.UploadActivity
+import com.example.concertapp.R
+import com.google.android.material.navigation.NavigationView
+
 
 class AdminFragment : Fragment(R.layout.fragment_admin), NavigationView.OnNavigationItemSelectedListener {
 
@@ -53,9 +53,12 @@ class AdminFragment : Fragment(R.layout.fragment_admin), NavigationView.OnNaviga
             }
             R.id.homeFragment -> {
                 Toast.makeText(requireContext(), "Home Selected", Toast.LENGTH_SHORT).show()
+                val intent = Intent(requireContext(), HomeActivity::class.java)
+                startActivity(intent)
+
             }
             R.id.addFragment -> {
-                // Add seçildiğinde UploadActivity'ye yönlendir
+                // Add seçildiğinde AddActivity'ye yönlendir
                 val intent = Intent(requireContext(), AddActivity::class.java)
                 startActivity(intent)
             }

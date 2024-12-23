@@ -14,6 +14,7 @@ class UploadActivity : AppCompatActivity() {
     private lateinit var uploadTopic: EditText
     private lateinit var uploadDesc: EditText
     private lateinit var uploadLang: EditText
+    private lateinit var uploadDate: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,7 @@ class UploadActivity : AppCompatActivity() {
         uploadDesc = findViewById(R.id.uploadDesc)
         uploadTopic = findViewById(R.id.uploadTopic)
         uploadLang = findViewById(R.id.uploadLang)
+        uploadDate = findViewById(R.id.uploadDate)
         saveButton = findViewById(R.id.saveButton)
 
         saveButton.setOnClickListener {
@@ -33,12 +35,13 @@ class UploadActivity : AppCompatActivity() {
         val title = uploadTopic.text.toString()
         val desc = uploadDesc.text.toString()
         val lang = uploadLang.text.toString()
+        val date = uploadDate.text.toString()
 
         if (title.isNotEmpty() && desc.isNotEmpty() && lang.isNotEmpty()) {
             val currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().time)
-            val dataClass = DataClass(title, desc, lang, null)
+            val dataClass = DataClass(title, desc, lang, date,null)
 
-            FirebaseDatabase.getInstance().getReference("Android Tutorials").child(currentDate)
+            FirebaseDatabase.getInstance().getReference("Festival Data").child(currentDate)
                 .setValue(dataClass)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {

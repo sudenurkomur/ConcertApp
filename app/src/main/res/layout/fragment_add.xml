@@ -6,17 +6,65 @@
     android:layout_height="match_parent"
     tools:context=".AddFragment">
 
+    <!-- FAB: Upload Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
+        android:layout_margin="20dp"
         android:backgroundTint="@color/lavender"
         android:src="@drawable/baseline_add_24"
         app:tint="@color/white" />
 
+    <!-- FAB: Back Button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/lavender"
+        android:src="@drawable/baseline_arrow_back_24"
+        app:tint="@color/white" />
 
+    <!-- TextViews for Festival Data -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="80dp"
+        android:padding="16dp">
 
+        <TextView
+            android:id="@+id/dataTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/dataDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/dataTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/dataLang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Language" />
+
+    </LinearLayout>
 
 </FrameLayout>

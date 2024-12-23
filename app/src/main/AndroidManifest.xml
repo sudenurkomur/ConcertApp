@@ -28,12 +28,21 @@
         </intent-filter>
     </activity>
         <activity android:name=".AddActivity"
-            android:theme="@style/Theme.AppCompat.Light"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             tools:ignore="Instantiatable" />
 
         <activity android:name=".UploadActivity"
-            android:theme="@style/Theme.AppCompat.Light"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             tools:ignore="Instantiatable" />
+
+        <activity android:name=".HomeActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:label="Home Activity">
+        </activity>
+
+
+
+
 
 
     </application>

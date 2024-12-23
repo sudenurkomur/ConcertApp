@@ -35,7 +35,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 android:src="@drawable/concertspace"
                 android:id="@+id/uploadImage"
                 android:layout_marginTop="10dp"
@@ -71,6 +71,17 @@
                 android:layout_marginTop="20dp"
                 android:padding="16dp"
                 android:hint="Enter Singer Name"
+                android:gravity="start|center_vertical"
+                android:textColor="@color/lavender"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:id="@+id/uploadDate"
+                android:background="@drawable/lavender_border"
+                android:layout_marginTop="20dp"
+                android:padding="16dp"
+                android:hint="Enter Time"
                 android:gravity="start|center_vertical"
                 android:textColor="@color/lavender"/>
 

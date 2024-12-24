@@ -37,22 +37,29 @@ class UploadActivity : AppCompatActivity() {
         val lang = uploadLang.text.toString()
         val date = uploadDate.text.toString()
 
-        if (title.isNotEmpty() && desc.isNotEmpty() && lang.isNotEmpty()) {
+        // Check if the fields are not empty
+        if (title.isNotEmpty() && desc.isNotEmpty() && lang.isNotEmpty() && date.isNotEmpty()) {
             val currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().time)
-            val dataClass = DataClass(title, desc, lang, date,null)
 
+            // Create a data class instance to hold the concert details
+            val dataClass = DataClass(title, desc, lang, date, null)
+
+            // Save the data to Firebase Realtime Database
             FirebaseDatabase.getInstance().getReference("Festival Data").child(currentDate)
                 .setValue(dataClass)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        // Show a success message
                         Toast.makeText(this, "Saved Successfully", Toast.LENGTH_SHORT).show()
-                        finish()
+                        finish() // Finish the activity and return to the previous screen
                     }
                 }
                 .addOnFailureListener { e ->
+                    // Show an error message if saving failed
                     Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
                 }
         } else {
+            // Show an error message if fields are empty
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
         }
     }

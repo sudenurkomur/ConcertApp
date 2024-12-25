@@ -26,7 +26,8 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-    </activity>
+        </activity>
+
         <activity android:name=".AddActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             tools:ignore="Instantiatable" />
@@ -40,10 +41,10 @@
             android:label="Home Activity">
         </activity>
 
-
-
-
-
+        <activity
+            android:name=".EditFestivalActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:label="Edit Festival" />
 
     </application>
 

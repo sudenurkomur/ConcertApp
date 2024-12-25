@@ -6,7 +6,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class FestivalAdapter(private val festivalList: List<DataClass>) : RecyclerView.Adapter<FestivalAdapter.FestivalViewHolder>() {
+class FestivalAdapter(
+    private val festivalList: List<DataClass>,
+    private val onItemClick: ((DataClass) -> Unit)? = null // Tıklama işlevi
+) : RecyclerView.Adapter<FestivalAdapter.FestivalViewHolder>() {
+
+    inner class FestivalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val festivalTitle: TextView = itemView.findViewById(R.id.festivalTitle)
+        val festivalDesc: TextView = itemView.findViewById(R.id.festivalDesc)
+        val festivalLang: TextView = itemView.findViewById(R.id.festivalLang)
+        val festivalDate: TextView = itemView.findViewById(R.id.festivalDate)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FestivalViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_festival, parent, false)
@@ -15,25 +25,16 @@ class FestivalAdapter(private val festivalList: List<DataClass>) : RecyclerView.
 
     override fun onBindViewHolder(holder: FestivalViewHolder, position: Int) {
         val festival = festivalList[position]
-        holder.bind(festival)
-    }
+        holder.festivalTitle.text = festival.dataTitle ?: "No Title"
+        holder.festivalDesc.text = festival.dataDesc ?: "No Description"
+        holder.festivalLang.text = festival.dataLang ?: "No Language"
+        holder.festivalDate.text = festival.dataTime ?: "No Date"
 
-    override fun getItemCount(): Int {
-        return festivalList.size
-    }
-
-    class FestivalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val title: TextView = itemView.findViewById(R.id.festivalTitle)
-        private val desc: TextView = itemView.findViewById(R.id.festivalDesc)
-        private val lang: TextView = itemView.findViewById(R.id.festivalLang)
-        private val date: TextView = itemView.findViewById(R.id.festivalDate)
-
-        fun bind(festival: DataClass) {
-            // Güncellenmiş DataClass alanlarıyla bağlama
-            title.text = festival.dataTitle
-            desc.text = festival.dataDesc
-            lang.text = festival.dataLang
-            date.text = festival.dataTime
+        // Tıklama olayını tanımlıyoruz
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(festival)
         }
     }
+
+    override fun getItemCount(): Int = festivalList.size
 }

@@ -57,7 +57,8 @@ class LoginFragment : Fragment(R.layout.fragment_login_tab) {
                             .commit()
                     } else {
                         Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
-                        // Diğer kullanıcılar için farklı bir işlem yapılabilir
+                        /* Diğer kullanıcılar için farklı bir işlem yapılabilir
+-----> Buradan devam edilecek, kullanici islemleri */
                     }
                 } else {
                     // Giriş başarısız

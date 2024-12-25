@@ -15,9 +15,9 @@ class AddActivity : AppCompatActivity() {
 
     private lateinit var fab: FloatingActionButton
     private lateinit var backButton: FloatingActionButton
-    private lateinit var festivalList: MutableList<DataClass> // Veriyi tutacağımız liste
-    private lateinit var festivalAdapter: FestivalAdapter // RecyclerView adapteri
-    private lateinit var recyclerView: RecyclerView // RecyclerView
+    private lateinit var festivalList: MutableList<DataClass>
+    private lateinit var festivalAdapter: FestivalAdapter
+    private lateinit var recyclerView: RecyclerView
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,15 @@ class AddActivity : AppCompatActivity() {
 
         // FestivalAdapter'i başlatıyoruz
         festivalList = mutableListOf()
-        festivalAdapter = FestivalAdapter(festivalList)
+        festivalAdapter = FestivalAdapter(festivalList) { selectedFestival ->
+            val intent = Intent(this, EditFestivalActivity::class.java)
+            intent.putExtra("key", selectedFestival.key)
+            intent.putExtra("dataTitle", selectedFestival.dataTitle)
+            intent.putExtra("dataStage", selectedFestival.dataLang) // Sahne adı
+            intent.putExtra("dataSinger", selectedFestival.dataLang) // Şarkıcı adı
+            intent.putExtra("dataTime", selectedFestival.dataTime)
+            startActivity(intent)
+        }
         recyclerView.adapter = festivalAdapter
 
         // Firebase veritabanı referansını başlatıyoruz
@@ -41,7 +49,6 @@ class AddActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 festivalList.clear() // Önce listeyi temizliyoruz
 
-                // Firebase'den gelen verileri festivalList'e ekliyoruz
                 for (festivalSnapshot in snapshot.children) {
                     val festival = festivalSnapshot.getValue(DataClass::class.java)
                     festival?.let {

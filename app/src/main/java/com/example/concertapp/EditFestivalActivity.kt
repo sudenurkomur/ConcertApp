@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
 
@@ -14,6 +15,7 @@ class EditFestivalActivity : AppCompatActivity() {
     private lateinit var editSinger: EditText
     private lateinit var editTime: EditText
     private lateinit var saveButton: Button
+    private lateinit var deleteButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,7 @@ class EditFestivalActivity : AppCompatActivity() {
         editSinger = findViewById(R.id.editSinger)
         editTime = findViewById(R.id.editTime)
         saveButton = findViewById(R.id.saveButton)
+        deleteButton = findViewById(R.id.deleteButton)
 
         // Intent'ten gelen verileri alıyoruz
         val key = intent.getStringExtra("key")
@@ -65,6 +68,38 @@ class EditFestivalActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Invalid festival key!", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Silme butonuna tıklama olayını tanımlıyoruz
+        deleteButton.setOnClickListener {
+            if (key != null) {
+                showDeleteConfirmationDialog(key)
+            } else {
+                Toast.makeText(this, "Festival key not found!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // Silme işlemi için onaylama diyaloğu
+    private fun showDeleteConfirmationDialog(key: String) {
+        AlertDialog.Builder(this)
+            .setTitle("Delete Festival")
+            .setMessage("Are you sure you want to delete this festival?")
+            .setPositiveButton("Yes") { _, _ ->
+                deleteFestival(key)
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
+    // Silme işlemini gerçekleştiren fonksiyon
+    private fun deleteFestival(key: String) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Festival Data").child(key)
+        databaseReference.removeValue().addOnSuccessListener {
+            Toast.makeText(this, "Festival deleted successfully!", Toast.LENGTH_SHORT).show()
+            finish() // Aktiviteden çık
+        }.addOnFailureListener {
+            Toast.makeText(this, "Failed to delete festival: ${it.message}", Toast.LENGTH_SHORT).show()
         }
     }
 }

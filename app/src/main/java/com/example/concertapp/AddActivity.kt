@@ -32,11 +32,15 @@ class AddActivity : AppCompatActivity() {
         festivalList = mutableListOf()
         festivalAdapter = FestivalAdapter(festivalList) { selectedFestival ->
             val intent = Intent(this, EditFestivalActivity::class.java)
-            intent.putExtra("key", selectedFestival.key)
+            intent.putExtra("key", selectedFestival.key) // Festival key burada gönderiliyor
             intent.putExtra("dataTitle", selectedFestival.dataTitle)
-            intent.putExtra("dataStage", selectedFestival.dataLang) // Sahne adı
-            intent.putExtra("dataSinger", selectedFestival.dataLang) // Şarkıcı adı
+            intent.putExtra("dataStage", selectedFestival.dataLang)
+            intent.putExtra("dataSinger", selectedFestival.dataLang)
             intent.putExtra("dataTime", selectedFestival.dataTime)
+
+            // Log ile gönderilen key'i kontrol edin
+            Log.d("AddActivity", "Gönderilen key: ${selectedFestival.key}")
+
             startActivity(intent)
         }
         recyclerView.adapter = festivalAdapter
@@ -44,23 +48,20 @@ class AddActivity : AppCompatActivity() {
         // Firebase veritabanı referansını başlatıyoruz
         val festivalRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Festival Data")
 
-        // Firebase'den verileri çekiyoruz
         festivalRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                festivalList.clear() // Önce listeyi temizliyoruz
+                festivalList.clear() // Listeyi temizle
 
                 for (festivalSnapshot in snapshot.children) {
                     val festival = festivalSnapshot.getValue(DataClass::class.java)
                     festival?.let {
+                        it.key = festivalSnapshot.key // Firebase'deki benzersiz key'i ekle
                         festivalList.add(it)
                     }
                 }
 
-                // Adapteri güncelliyoruz
+                // Adapteri güncelle
                 festivalAdapter.notifyDataSetChanged()
-
-                // Veriyi logluyoruz
-                Log.d("FirebaseData", "Festival List: $festivalList")
             }
 
             override fun onCancelled(error: DatabaseError) {

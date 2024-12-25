@@ -29,7 +29,16 @@ class LoginFragment : Fragment(R.layout.fragment_login_tab) {
             if (enteredEmail.isEmpty() || enteredPassword.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter both email and password", Toast.LENGTH_SHORT).show()
             } else {
+                // Test amaçlı direkt UserFragment'a yönlendirme
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, UserFragment())
+                    .addToBackStack(null)
+                    .commit()
+
+                // Firebase Authentication işlemini yoruma aldık
+                /*
                 loginUser(enteredEmail, enteredPassword)
+                */
             }
         }
 

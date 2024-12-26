@@ -34,8 +34,8 @@ class AddActivity : AppCompatActivity() {
             val intent = Intent(this, EditFestivalActivity::class.java)
             intent.putExtra("key", selectedFestival.key) // Festival key burada gönderiliyor
             intent.putExtra("dataTitle", selectedFestival.dataTitle)
-            intent.putExtra("dataStage", selectedFestival.dataLang)
-            intent.putExtra("dataSinger", selectedFestival.dataLang)
+            intent.putExtra("dataStage", selectedFestival.dataStage)
+            intent.putExtra("dataSinger", selectedFestival.dataSinger)
             intent.putExtra("dataTime", selectedFestival.dataTime)
 
             // Log ile gönderilen key'i kontrol edin

@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:backgroundTint="@android:color/holo_red_light"
+            android:backgroundTint="@color/lavender"
             android:text="Delete"
             android:textColor="@android:color/white" />
 

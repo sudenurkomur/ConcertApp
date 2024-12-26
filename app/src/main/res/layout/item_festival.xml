@@ -12,26 +12,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:textColor="@color/black" />
+        android:textStyle="bold"
+        android:text="Festival Title" />
 
     <TextView
-        android:id="@+id/festivalDesc"
+        android:id="@+id/festivalStage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="@color/black" />
+        android:text="Stage Name" />
 
     <TextView
-        android:id="@+id/festivalLang"
+        android:id="@+id/festivalSinger"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="@color/black" />
+        android:text="Singer Name" />
 
     <TextView
-        android:id="@+id/festivalDate"
+        android:id="@+id/festivalTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="@color/black" />
+        android:text="Time" />
 </LinearLayout>

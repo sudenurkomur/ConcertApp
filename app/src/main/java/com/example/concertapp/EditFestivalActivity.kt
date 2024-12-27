@@ -6,7 +6,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.FirebaseDatabase
+import com.example.concertapp.api.SupabaseClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EditFestivalActivity : AppCompatActivity() {
 
@@ -30,10 +33,10 @@ class EditFestivalActivity : AppCompatActivity() {
         deleteButton = findViewById(R.id.deleteButton)
 
         // Intent'ten gelen verileri alıyoruz
-        val key = intent.getStringExtra("key")
+        val id = intent.getStringExtra("key") // Supabase'deki benzersiz ID
         val title = intent.getStringExtra("dataTitle")
-        val stage = intent.getStringExtra("dataStage") // Sahne adı
-        val singer = intent.getStringExtra("dataSinger") // Şarkıcı adı
+        val stage = intent.getStringExtra("dataStage")
+        val singer = intent.getStringExtra("dataSinger")
         val time = intent.getStringExtra("dataTime")
 
         // Gelen verileri EditText alanlarına yerleştiriyoruz
@@ -49,57 +52,77 @@ class EditFestivalActivity : AppCompatActivity() {
             val updatedSinger = editSinger.text.toString()
             val updatedTime = editTime.text.toString()
 
-            if (key != null) {
-                // Firebase Realtime Database güncellemesi
-                val databaseReference = FirebaseDatabase.getInstance().getReference("Festival Data").child(key)
-                val updatedFestival = mapOf(
-                    "dataTitle" to updatedTitle,
-                    "dataStage" to updatedStage,
-                    "dataSinger" to updatedSinger,
-                    "dataTime" to updatedTime
-                )
-
-                databaseReference.updateChildren(updatedFestival).addOnSuccessListener {
-                    Toast.makeText(this, "Festival updated successfully!", Toast.LENGTH_SHORT).show()
-                    finish() // Düzenleme ekranını kapatır ve geri döner
-                }.addOnFailureListener {
-                    Toast.makeText(this, "Failed to update festival: ${it.message}", Toast.LENGTH_SHORT).show()
-                }
+            if (id != null) {
+                updateFestival(id, updatedTitle, updatedStage, updatedSinger, updatedTime)
             } else {
-                Toast.makeText(this, "Invalid festival key!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Invalid festival ID!", Toast.LENGTH_SHORT).show()
             }
         }
 
         // Silme butonuna tıklama olayını tanımlıyoruz
         deleteButton.setOnClickListener {
-            if (key != null) {
-                showDeleteConfirmationDialog(key)
+            if (id != null) {
+                showDeleteConfirmationDialog(id)
             } else {
-                Toast.makeText(this, "Festival key not found!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Festival ID not found!", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    // Festival güncelleme işlemi
+    private fun updateFestival(id: String, title: String, stage: String, singer: String, time: String) {
+        val updatedFestival = mapOf(
+            "title" to title,
+            "stage" to stage,
+            "singer" to singer,
+            "date" to time
+        )
+
+        SupabaseClient.supabaseService.updateFestival(id, updatedFestival)
+            .enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@EditFestivalActivity, "Festival updated successfully!", Toast.LENGTH_SHORT).show()
+                        finish() // Düzenleme ekranını kapat
+                    } else {
+                        Toast.makeText(this@EditFestivalActivity, "Failed to update festival!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(this@EditFestivalActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
     // Silme işlemi için onaylama diyaloğu
-    private fun showDeleteConfirmationDialog(key: String) {
+    private fun showDeleteConfirmationDialog(id: String) {
         AlertDialog.Builder(this)
             .setTitle("Delete Festival")
             .setMessage("Are you sure you want to delete this festival?")
             .setPositiveButton("Yes") { _, _ ->
-                deleteFestival(key)
+                deleteFestival(id)
             }
             .setNegativeButton("No", null)
             .show()
     }
 
-    // Silme işlemini gerçekleştiren fonksiyon
-    private fun deleteFestival(key: String) {
-        val databaseReference = FirebaseDatabase.getInstance().getReference("Festival Data").child(key)
-        databaseReference.removeValue().addOnSuccessListener {
-            Toast.makeText(this, "Festival deleted successfully!", Toast.LENGTH_SHORT).show()
-            finish() // Aktiviteden çık
-        }.addOnFailureListener {
-            Toast.makeText(this, "Failed to delete festival: ${it.message}", Toast.LENGTH_SHORT).show()
-        }
+    // Festival silme işlemi
+    private fun deleteFestival(id: String) {
+        SupabaseClient.supabaseService.deleteFestival(id)
+            .enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@EditFestivalActivity, "Festival deleted successfully!", Toast.LENGTH_SHORT).show()
+                        finish() // Aktiviteden çık
+                    } else {
+                        Toast.makeText(this@EditFestivalActivity, "Failed to delete festival!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(this@EditFestivalActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 }

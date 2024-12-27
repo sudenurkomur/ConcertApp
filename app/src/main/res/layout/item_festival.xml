@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -7,32 +8,58 @@
     android:background="@drawable/lavender_border"
     android:layout_margin="8dp">
 
+    <!-- Festival Görseli -->
+    <ImageView
+        android:id="@+id/festivalImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sample_image" /> <!-- Örnek görsel -->
+
+    <!-- Festival Başlığı -->
     <TextView
         android:id="@+id/festivalTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         android:text="Festival Title" />
 
+    <!-- Sahne Bilgisi -->
     <TextView
         android:id="@+id/festivalStage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
+        android:textColor="@color/black"
         android:text="Stage Name" />
 
+    <!-- Şarkıcı Bilgisi -->
     <TextView
         android:id="@+id/festivalSinger"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
+        android:textColor="@color/black"
         android:text="Singer Name" />
 
+    <!-- Tarih Bilgisi -->
     <TextView
         android:id="@+id/festivalTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
+        android:textColor="@color/black"
         android:text="Time" />
+
+    <!-- Konum Bilgisi -->
+    <TextView
+        android:id="@+id/festivalLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:text="Location" />
 </LinearLayout>

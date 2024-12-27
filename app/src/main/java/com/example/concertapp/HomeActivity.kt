@@ -9,17 +9,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.example.concertapp.R
+import com.example.concertapp.api.SupabaseClient
+import com.example.concertapp.models.DataClass
 import com.example.navdrawerkotpractice.AdminFragment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeActivity : AppCompatActivity() {
 
     @SuppressLint("WrongViewCast", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Layout'u activity için set ediyoruz
         setContentView(R.layout.fragment_home)
 
         // TextView bileşenini buluyoruz
@@ -28,33 +29,8 @@ class HomeActivity : AppCompatActivity() {
         // Button bileşenini buluyoruz
         val backButton = findViewById<Button>(R.id.backButton)
 
-        // Firebase Authentication ile giriş yapan kullanıcıyı alıyoruz
-        val currentUser = FirebaseAuth.getInstance().currentUser
-
-        // Kullanıcı giriş yaptıysa işlem yapıyoruz
-        if (currentUser != null) {
-            // Firebase Realtime Database referansı
-            val databaseReference = FirebaseDatabase.getInstance().getReference("members")
-
-            // Firebase'den veri alıyoruz
-            databaseReference.get().addOnSuccessListener { snapshot ->
-                if (snapshot.exists()) {
-                    // Üye sayısını hesaplıyoruz
-                    val memberCount = snapshot.childrenCount
-                    // TextView'e üye sayısını yazıyoruz
-                    dataNumbers.text = memberCount.toString()
-                } else {
-                    dataNumbers.text = "0"
-                }
-            }.addOnFailureListener {
-                Log.e("FirebaseError", "Veri alınamadı: ${it.message}")
-                dataNumbers.text = "Error"
-            }
-        } else {
-            // Kullanıcı giriş yapmadıysa, hata mesajı gösteriyoruz
-            Log.e("FirebaseAuth", "Kullanıcı giriş yapmamış")
-            dataNumbers.text = "User not logged in"
-        }
+        // Supabase'den kullanıcı bilgisi çekme
+        fetchUserCount(dataNumbers)
 
         // backButton'a tıklama olayını ayarlıyoruz
         backButton.setOnClickListener {
@@ -63,13 +39,38 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    // Kullanıcı sayısını çekme işlemi
+    private fun fetchUserCount(dataNumbers: TextView) {
+        SupabaseClient.supabaseService.getFestivals()
+            .enqueue(object : Callback<List<DataClass>> {
+                override fun onResponse(
+                    call: Call<List<DataClass>>,
+                    response: Response<List<DataClass>>
+                ) {
+                    if (response.isSuccessful) {
+                        val events = response.body()
+                        val userCount = events?.size ?: 0
+                        dataNumbers.text = userCount.toString()
+                    } else {
+                        Log.e("SupabaseError", "Failed to fetch users: ${response.errorBody()?.string()}")
+                        dataNumbers.text = "Error"
+                    }
+                }
+
+                override fun onFailure(call: Call<List<DataClass>>, t: Throwable) {
+                    Log.e("SupabaseError", "Failed to fetch users: ${t.message}")
+                    dataNumbers.text = "Error"
+                }
+            })
+    }
+
     // Fragment'e geçiş yapan yardımcı bir fonksiyon
     private fun navigateToFragment(fragment: Fragment) {
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
-        fragmentTransaction.replace(R.id.fragment_container, fragment) // fragment_container id'sini düzenleyin
-        fragmentTransaction.addToBackStack(null) // Geri tuşuna basıldığında önceki fragmente dönmek için
+        fragmentTransaction.replace(R.id.fragment_container, fragment)
+        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
 }

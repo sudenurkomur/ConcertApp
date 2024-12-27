@@ -1,15 +1,17 @@
 package com.example.concertapp
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.navdrawerkotpractice.AdminFragment
+import com.example.concertapp.api.SupabaseClient
+import com.example.concertapp.models.DataClass
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class AddActivity : AppCompatActivity() {
 
@@ -19,7 +21,6 @@ class AddActivity : AppCompatActivity() {
     private lateinit var festivalAdapter: FestivalAdapter
     private lateinit var recyclerView: RecyclerView
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_add)
@@ -32,42 +33,21 @@ class AddActivity : AppCompatActivity() {
         festivalList = mutableListOf()
         festivalAdapter = FestivalAdapter(festivalList) { selectedFestival ->
             val intent = Intent(this, EditFestivalActivity::class.java)
-            intent.putExtra("key", selectedFestival.key) // Festival key burada gönderiliyor
-            intent.putExtra("dataTitle", selectedFestival.dataTitle)
-            intent.putExtra("dataStage", selectedFestival.dataStage)
-            intent.putExtra("dataSinger", selectedFestival.dataSinger)
-            intent.putExtra("dataTime", selectedFestival.dataTime)
+            intent.putExtra("key", selectedFestival.id) // Supabase'deki benzersiz id
+            intent.putExtra("dataTitle", selectedFestival.title)
+            intent.putExtra("dataStage", selectedFestival.stage)
+            intent.putExtra("dataSinger", selectedFestival.singer)
+            intent.putExtra("dataTime", selectedFestival.date)
 
-            // Log ile gönderilen key'i kontrol edin
-            Log.d("AddActivity", "Gönderilen key: ${selectedFestival.key}")
+            // Log ile gönderilen id'yi kontrol edin
+            Log.d("AddActivity", "Gönderilen id: ${selectedFestival.id}")
 
             startActivity(intent)
         }
         recyclerView.adapter = festivalAdapter
 
-        // Firebase veritabanı referansını başlatıyoruz
-        val festivalRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Festival Data")
-
-        festivalRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                festivalList.clear() // Listeyi temizle
-
-                for (festivalSnapshot in snapshot.children) {
-                    val festival = festivalSnapshot.getValue(DataClass::class.java)
-                    festival?.let {
-                        it.key = festivalSnapshot.key // Firebase'deki benzersiz key'i ekle
-                        festivalList.add(it)
-                    }
-                }
-
-                // Adapteri güncelle
-                festivalAdapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("FirebaseError", "Error fetching data: ${error.message}")
-            }
-        })
+        // Supabase'den verileri çekiyoruz
+        fetchFestivals()
 
         // FAB butonuna tıklama olayını ekliyoruz
         fab = findViewById(R.id.fab)
@@ -79,11 +59,28 @@ class AddActivity : AppCompatActivity() {
         }
 
         backButton.setOnClickListener {
-            val fragment = AdminFragment()
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, fragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            finish() // Aktiviteyi kapatarak geri dön
         }
+    }
+
+    private fun fetchFestivals() {
+        SupabaseClient.supabaseService.getFestivals().enqueue(object : Callback<List<DataClass>> {
+            override fun onResponse(call: Call<List<DataClass>>, response: Response<List<DataClass>>) {
+                if (response.isSuccessful) {
+                    festivalList.clear()
+                    response.body()?.let {
+                        festivalList.addAll(it)
+                    }
+                    festivalAdapter.notifyDataSetChanged()
+                    Log.d("AddActivity", "Festivals fetched successfully: $festivalList")
+                } else {
+                    Log.e("AddActivity", "Error fetching festivals: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<DataClass>>, t: Throwable) {
+                Log.e("AddActivity", "Failed to fetch festivals: ${t.message}")
+            }
+        })
     }
 }

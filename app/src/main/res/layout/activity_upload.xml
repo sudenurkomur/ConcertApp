@@ -6,104 +6,114 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AddFragment">
+    tools:context=".UploadActivity">
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="20dp">
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal">
 
-        <LinearLayout
+        <!-- Başlık -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Event Data"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/lavender"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Görsel Seçme -->
+        <ImageView
+            android:id="@+id/uploadImage"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/lavender_border"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_image" />
+
+        <Button
+            android:id="@+id/selectImageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_horizontal"
-            android:padding="20dp"
-            android:background="@drawable/lavender_border">
+            android:layout_marginBottom="20dp"
+            android:text="Select Image"
+            android:textColor="@color/white"
+            android:background="@color/lavender" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Upload Concert Data"
-                android:textSize="30sp"
-                android:textAlignment="center"
-                android:textColor="@color/lavender"/>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:src="@drawable/concertspace"
-                android:id="@+id/uploadImage"
-                android:layout_marginTop="10dp"
-                android:scaleType="fitXY"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/uploadTopic"
-                android:background="@drawable/lavender_border"
-                android:layout_marginTop="20dp"
-                android:padding="16dp"
-                android:hint="Enter Festival Name"
-                android:gravity="start|center_vertical"
-                android:textColor="@color/lavender"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/uploadDesc"
-                android:background="@drawable/lavender_border"
-                android:layout_marginTop="20dp"
-                android:padding="16dp"
-                android:hint="Enter Stage Name"
-                android:gravity="start|center_vertical"
-                android:textColor="@color/lavender"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/uploadLang"
-                android:background="@drawable/lavender_border"
-                android:layout_marginTop="20dp"
-                android:padding="16dp"
-                android:hint="Enter Singer Name"
-                android:gravity="start|center_vertical"
-                android:textColor="@color/lavender"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:id="@+id/uploadDate"
-                android:background="@drawable/lavender_border"
-                android:layout_marginTop="20dp"
-                android:padding="16dp"
-                android:hint="Enter Time"
-                android:gravity="start|center_vertical"
-                android:textColor="@color/lavender"/>
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:text="Save"
-                android:textColor="@color/white"
-                android:id="@+id/saveButton"
-                android:textSize="18sp"
-                android:layout_marginTop="20dp"
-                android:background="@color/lavender"
-                app:cornerRadius = "20dp"/>
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/festivalListRecyclerView"
+        <!-- Festival Bilgileri -->
+        <EditText
+            android:id="@+id/uploadTitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp" />
+            android:layout_height="wrap_content"
+            android:hint="Enter Event Title"
+            android:background="@drawable/lavender_border"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/lavender" />
 
-    </androidx.cardview.widget.CardView>
+        <EditText
+            android:id="@+id/uploadStage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Stage Name"
+            android:background="@drawable/lavender_border"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/lavender" />
 
+        <EditText
+            android:id="@+id/uploadSinger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Singer Name"
+            android:background="@drawable/lavender_border"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/lavender" />
+
+        <EditText
+            android:id="@+id/uploadDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Date (YYYY-MM-DD)"
+            android:background="@drawable/lavender_border"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/lavender" />
+
+        <EditText
+            android:id="@+id/uploadLatitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Latitude"
+            android:background="@drawable/lavender_border"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/lavender" />
+
+        <EditText
+            android:id="@+id/uploadLongitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Longitude"
+            android:background="@drawable/lavender_border"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/lavender" />
+
+        <!-- Kaydet Butonu -->
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:background="@color/lavender" />
+
+    </LinearLayout>
 </ScrollView>

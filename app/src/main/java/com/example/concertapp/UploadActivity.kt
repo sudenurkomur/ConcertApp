@@ -5,62 +5,81 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.FirebaseDatabase
-import java.text.DateFormat
-import java.util.Calendar
+import com.example.concertapp.api.SupabaseClient
+import com.example.concertapp.models.DataClass
+import com.example.concertapp.models.Location
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class UploadActivity : AppCompatActivity() {
+
     private lateinit var saveButton: Button
-    private lateinit var uploadTopic: EditText
-    private lateinit var uploadDesc: EditText
-    private lateinit var uploadLang: EditText
+    private lateinit var uploadTitle: EditText
+    private lateinit var uploadStage: EditText
+    private lateinit var uploadSinger: EditText
     private lateinit var uploadDate: EditText
+    private lateinit var uploadLatitude: EditText
+    private lateinit var uploadLongitude: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload)
 
-        uploadDesc = findViewById(R.id.uploadDesc)
-        uploadTopic = findViewById(R.id.uploadTopic)
-        uploadLang = findViewById(R.id.uploadLang)
+        // EditText ve Button bileşenlerini tanımlayın
+        uploadTitle = findViewById(R.id.uploadTitle)
+        uploadStage = findViewById(R.id.uploadStage)
+        uploadSinger = findViewById(R.id.uploadSinger)
         uploadDate = findViewById(R.id.uploadDate)
+        uploadLatitude = findViewById(R.id.uploadLatitude)
+        uploadLongitude = findViewById(R.id.uploadLongitude)
         saveButton = findViewById(R.id.saveButton)
 
+        // Kaydetme işlemini başlatmak için tıklama olayı
         saveButton.setOnClickListener {
             saveData()
         }
     }
 
+    // Güncellenmiş saveData fonksiyonu
     private fun saveData() {
-        val title = uploadTopic.text.toString()
-        val desc = uploadDesc.text.toString()
-        val lang = uploadLang.text.toString()
-        val date = uploadDate.text.toString()
+        val title = uploadTitle.text.toString().trim()
+        val stage = uploadStage.text.toString().trim()
+        val singer = uploadSinger.text.toString().trim()
+        val date = uploadDate.text.toString().trim()
+        val latitude = uploadLatitude.text.toString().trim().toDoubleOrNull()
+        val longitude = uploadLongitude.text.toString().trim().toDoubleOrNull()
 
-        // Check if the fields are not empty
-        if (title.isNotEmpty() && desc.isNotEmpty() && lang.isNotEmpty() && date.isNotEmpty()) {
-            val currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().time)
+        if (title.isNotEmpty() && stage.isNotEmpty() && singer.isNotEmpty() && date.isNotEmpty() && latitude != null && longitude != null) {
+            val location = Location(latitude = latitude, longitude = longitude)
 
-            // Create a data class instance to hold the concert details
-            val dataClass = DataClass(title, desc, lang, date, null)
+            val event = DataClass(
+                id = "",
+                title = title,
+                stage = stage,
+                singer = singer,
+                date = date,
+                image = null,
+                location = location
+            )
 
-            // Save the data to Firebase Realtime Database
-            FirebaseDatabase.getInstance().getReference("Festival Data").child(currentDate)
-                .setValue(dataClass)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // Show a success message
-                        Toast.makeText(this, "Saved Successfully", Toast.LENGTH_SHORT).show()
-                        finish() // Finish the activity and return to the previous screen
+            SupabaseClient.supabaseService.addEvent(event)
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            Toast.makeText(this@UploadActivity, "Saved Successfully", Toast.LENGTH_SHORT).show()
+                            finish()
+                        } else {
+                            Toast.makeText(this@UploadActivity, "Failed: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
-                .addOnFailureListener { e ->
-                    // Show an error message if saving failed
-                    Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
-                }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Toast.makeText(this@UploadActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
         } else {
-            // Show an error message if fields are empty
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please fill all fields with valid data", Toast.LENGTH_SHORT).show()
         }
     }
 }

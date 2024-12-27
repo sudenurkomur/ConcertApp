@@ -1,5 +1,6 @@
 package com.example.concertapp
 
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -12,12 +13,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.concertapp.api.SupabaseClient
 import com.example.concertapp.databinding.FragmentUserBinding
+import com.example.concertapp.models.DataClass
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class UserFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -65,27 +67,31 @@ class UserFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         festivalAdapter = FestivalAdapter(festivalList)
         binding.festivalRecyclerView.adapter = festivalAdapter
 
-        // Firebase'den festivalleri çek
+        // Festivalleri Supabase'den çek
         fetchFestivals()
     }
 
     private fun fetchFestivals() {
-        val databaseReference = FirebaseDatabase.getInstance().getReference("Festival Data")
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                festivalList.clear() // Eski verileri temizle
-                for (festivalSnapshot in snapshot.children) {
-                    val festival = festivalSnapshot.getValue(DataClass::class.java)
-                    festival?.let {
-                        it.key = festivalSnapshot.key // Benzersiz key değerini atayın
-                        festivalList.add(it)
+        SupabaseClient.supabaseService.getFestivals().enqueue(object : Callback<List<DataClass>> {
+            override fun onResponse(
+                call: Call<List<DataClass>>,
+                response: Response<List<DataClass>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let { festivals ->
+                        festivalList.clear()
+                        festivalList.addAll(festivals)
+                        festivalAdapter.notifyDataSetChanged()
+                    } ?: run {
+                        Toast.makeText(requireContext(), "No festivals found", Toast.LENGTH_SHORT).show()
                     }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch festivals: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
                 }
-                festivalAdapter.notifyDataSetChanged() // Adapteri güncelle
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(requireContext(), "Failed to fetch festivals: ${error.message}", Toast.LENGTH_SHORT).show()
+            override fun onFailure(call: Call<List<DataClass>>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }

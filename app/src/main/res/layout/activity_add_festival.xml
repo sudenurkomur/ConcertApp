@@ -6,37 +6,56 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Festival Adı -->
     <EditText
         android:id="@+id/festivalName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Festival Name"
+        android:inputType="text"
         android:layout_marginBottom="8dp" />
 
+    <!-- Festival Açıklaması -->
     <EditText
         android:id="@+id/festivalDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Festival Description"
+        android:hint="Description"
+        android:inputType="textCapSentences|textMultiLine"
+        android:minLines="3"
+        android:gravity="top|start"
         android:layout_marginBottom="8dp" />
 
+    <!-- Başlangıç Tarihi -->
     <EditText
         android:id="@+id/startDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Start Date (YYYY-MM-DD)"
+        android:inputType="none"
+        android:focusable="false"
         android:layout_marginBottom="8dp" />
 
+    <!-- Bitiş Tarihi -->
     <EditText
         android:id="@+id/endDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="End Date (YYYY-MM-DD)"
+        android:inputType="none"
+        android:focusable="false"
         android:layout_marginBottom="8dp" />
 
+    <!-- Kaydet Düğmesi -->
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:text="Save"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/lavender"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp" />
+
 </LinearLayout>

@@ -1,128 +1,130 @@
 package com.example.concertapp
 
+import UpdatedFestival
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.concertapp.api.SupabaseClient
+import com.example.concertapp.models.Festival
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class EditFestivalActivity : AppCompatActivity() {
 
-    private lateinit var editTitle: EditText
-    private lateinit var editStage: EditText
-    private lateinit var editSinger: EditText
-    private lateinit var editTime: EditText
+    private lateinit var festivalName: EditText
+    private lateinit var festivalDesc: EditText
+    private lateinit var startDate: EditText
+    private lateinit var endDate: EditText
     private lateinit var saveButton: Button
-    private lateinit var deleteButton: Button
+
+    private var festivalId: Long = -1L // Varsayılan geçersiz ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_festival)
 
-        // EditText ve Button referanslarını buluyoruz
-        editTitle = findViewById(R.id.editTitle)
-        editStage = findViewById(R.id.editStage)
-        editSinger = findViewById(R.id.editSinger)
-        editTime = findViewById(R.id.editTime)
+        // Bileşenleri bağla
+        festivalName = findViewById(R.id.festivalName)
+        festivalDesc = findViewById(R.id.festivalDesc)
+        startDate = findViewById(R.id.startDate)
+        endDate = findViewById(R.id.endDate)
         saveButton = findViewById(R.id.saveButton)
-        deleteButton = findViewById(R.id.deleteButton)
 
-        // Intent'ten gelen verileri alıyoruz
-        val id = intent.getStringExtra("key") // Supabase'deki benzersiz ID
-        val title = intent.getStringExtra("dataTitle")
-        val stage = intent.getStringExtra("dataStage")
-        val singer = intent.getStringExtra("dataSinger")
-        val time = intent.getStringExtra("dataTime")
-
-        // Gelen verileri EditText alanlarına yerleştiriyoruz
-        editTitle.setText(title)
-        editStage.setText(stage)
-        editSinger.setText(singer)
-        editTime.setText(time)
-
-        // Kaydet butonuna tıklama olayını tanımlıyoruz
-        saveButton.setOnClickListener {
-            val updatedTitle = editTitle.text.toString()
-            val updatedStage = editStage.text.toString()
-            val updatedSinger = editSinger.text.toString()
-            val updatedTime = editTime.text.toString()
-
-            if (id != null) {
-                updateFestival(id, updatedTitle, updatedStage, updatedSinger, updatedTime)
-            } else {
-                Toast.makeText(this, "Invalid festival ID!", Toast.LENGTH_SHORT).show()
-            }
+        // Festival ID'yi al
+        festivalId = intent.getLongExtra("festivalId", -1L)
+        if (festivalId == -1L) {
+            Toast.makeText(this, "Invalid Festival ID", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
 
-        // Silme butonuna tıklama olayını tanımlıyoruz
-        deleteButton.setOnClickListener {
-            if (id != null) {
-                showDeleteConfirmationDialog(id)
-            } else {
-                Toast.makeText(this, "Festival ID not found!", Toast.LENGTH_SHORT).show()
+        // Festival bilgilerini yükle
+        loadFestivalDetails()
+
+        // Kaydet düğmesine tıklama olayı
+        saveButton.setOnClickListener {
+            val name = festivalName.text.toString().trim()
+            val desc = festivalDesc.text.toString().trim()
+            val start = startDate.text.toString().trim()
+            val end = endDate.text.toString().trim()
+
+            if (name.isEmpty() || desc.isEmpty() || start.isEmpty() || end.isEmpty()) {
+                Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            // Güncelleme işlemini başlat
+            updateFestival(festivalId.toString(), name, desc, start, end)
         }
     }
 
-    // Festival güncelleme işlemi
-    private fun updateFestival(id: String, title: String, stage: String, singer: String, time: String) {
-        val updatedFestival = mapOf(
-            "title" to title,
-            "stage" to stage,
-            "singer" to singer,
-            "date" to time
+    private fun loadFestivalDetails() {
+        SupabaseClient.supabaseService.getFestivalById("eq.$festivalId")
+            .enqueue(object : Callback<List<Festival>> {
+                override fun onResponse(call: Call<List<Festival>>, response: Response<List<Festival>>) {
+                    if (response.isSuccessful) {
+                        val festival = response.body()?.firstOrNull()
+                        if (festival != null) {
+                            // Alanlara mevcut bilgileri doldur
+                            festivalName.setText(festival.name)
+                            festivalDesc.setText(festival.desc)
+                            startDate.setText(festival.start_date)
+                            endDate.setText(festival.end_date)
+                        } else {
+                            Toast.makeText(this@EditFestivalActivity, "Festival not found.", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                    } else {
+                        logError("Failed to load festival details", response.errorBody()?.string())
+                        Toast.makeText(this@EditFestivalActivity, "Error loading festival details.", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+
+                override fun onFailure(call: Call<List<Festival>>, t: Throwable) {
+                    logError("Error loading festival details", t.message)
+                    Toast.makeText(this@EditFestivalActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            })
+    }
+
+    private fun updateFestival(id: String, name: String, desc: String, startDate: String, endDate: String) {
+        val updatedFestival = UpdatedFestival(
+            name = name,
+            desc = desc,
+            start_date = startDate,
+            end_date = endDate
         )
 
-        SupabaseClient.supabaseService.updateFestival(id, updatedFestival)
+        // id'yi eq. ile biçimlendirin
+        val formattedId = "eq.$id"
+
+        SupabaseClient.supabaseService.updateFestival(formattedId, updatedFestival)
             .enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
-                        Toast.makeText(this@EditFestivalActivity, "Festival updated successfully!", Toast.LENGTH_SHORT).show()
-                        finish() // Düzenleme ekranını kapat
+                        Toast.makeText(this@EditFestivalActivity, "Festival updated successfully.", Toast.LENGTH_SHORT).show()
+                        finish()
                     } else {
-                        Toast.makeText(this@EditFestivalActivity, "Failed to update festival!", Toast.LENGTH_SHORT).show()
+                        val error = response.errorBody()?.string() ?: "Unknown error"
+                        Log.e("EditFestivalActivity", "Error updating festival: $error")
+                        Toast.makeText(this@EditFestivalActivity, "Error: $error", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e("EditFestivalActivity", "Failed to update festival: ${t.message}")
                     Toast.makeText(this@EditFestivalActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                 }
             })
     }
 
-    // Silme işlemi için onaylama diyaloğu
-    private fun showDeleteConfirmationDialog(id: String) {
-        AlertDialog.Builder(this)
-            .setTitle("Delete Festival")
-            .setMessage("Are you sure you want to delete this festival?")
-            .setPositiveButton("Yes") { _, _ ->
-                deleteFestival(id)
-            }
-            .setNegativeButton("No", null)
-            .show()
-    }
-
-    // Festival silme işlemi
-    private fun deleteFestival(id: String) {
-        SupabaseClient.supabaseService.deleteFestival(id)
-            .enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@EditFestivalActivity, "Festival deleted successfully!", Toast.LENGTH_SHORT).show()
-                        finish() // Aktiviteden çık
-                    } else {
-                        Toast.makeText(this@EditFestivalActivity, "Failed to delete festival!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(this@EditFestivalActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
+    private fun logError(tag: String, message: String?) {
+        Log.e(tag, message ?: "Unknown error")
     }
 }

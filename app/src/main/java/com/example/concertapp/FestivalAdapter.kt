@@ -3,25 +3,24 @@ package com.example.concertapp
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.concertapp.models.DataClass
+import com.example.concertapp.models.Festival
 
 class FestivalAdapter(
-    private val festivalList: List<DataClass>,
-    private val onItemClick: ((DataClass) -> Unit)? = null // Tıklama işlevi
+    private var festivalList: List<Festival>,
+    private val onItemClick: ((Festival) -> Unit)? = null
 ) : RecyclerView.Adapter<FestivalAdapter.FestivalViewHolder>() {
 
-    // ViewHolder sınıfı
     inner class FestivalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val festivalTitle: TextView = itemView.findViewById(R.id.festivalTitle)
-        val festivalStage: TextView = itemView.findViewById(R.id.festivalStage)
-        val festivalSinger: TextView = itemView.findViewById(R.id.festivalSinger)
-        val festivalDate: TextView = itemView.findViewById(R.id.festivalTime)
-        val festivalLocation: TextView = itemView.findViewById(R.id.festivalLocation)
-        val festivalImage: ImageView = itemView.findViewById(R.id.festivalImage)
+        val festivalName: TextView = itemView.findViewById(R.id.festivalTitle)
+        val festivalDescription: TextView = itemView.findViewById(R.id.festivalDescription)
+        val festivalDates: TextView = itemView.findViewById(R.id.festivalDates)
+    }
+
+    fun updateList(newList: List<Festival>) {
+        festivalList = newList
+        notifyDataSetChanged() // RecyclerView'i günceller
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FestivalViewHolder {
@@ -31,21 +30,10 @@ class FestivalAdapter(
 
     override fun onBindViewHolder(holder: FestivalViewHolder, position: Int) {
         val festival = festivalList[position]
+        holder.festivalName.text = festival.name
+        holder.festivalDescription.text = festival.desc
+        holder.festivalDates.text = "${festival.start_date} - ${festival.end_date}"
 
-        // Verileri bağlama
-        holder.festivalTitle.text = festival.title
-        holder.festivalStage.text = festival.stage
-        holder.festivalSinger.text = festival.singer
-        holder.festivalDate.text = festival.date
-        holder.festivalLocation.text = "Lat: ${festival.location.latitude}, Lng: ${festival.location.longitude}"
-
-        // Glide kullanarak görseli yükleme
-        Glide.with(holder.itemView.context)
-            .load(festival.image) // Supabase'den gelen görsel URL
-            .placeholder(R.drawable.sample_image) // Görsel yüklenirken geçici resim
-            .into(holder.festivalImage)
-
-        // Tıklama olayını tanımlama
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(festival)
         }

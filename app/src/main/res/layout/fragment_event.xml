@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Etkinlik Başlığı -->
+    <TextView
+        android:id="@+id/eventTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Event Title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Etkinlik Görseli -->
+    <ImageView
+        android:id="@+id/eventImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="Event Image" />
+
+    <!-- Sahne Bilgisi -->
+    <TextView
+        android:id="@+id/eventStage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stage: Main Stage"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Şarkıcı Bilgisi -->
+    <TextView
+        android:id="@+id/eventSinger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Singer: Artist Name"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Tarih Bilgisi -->
+    <TextView
+        android:id="@+id/eventDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Date: YYYY-MM-DD"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Konum Bilgisi -->
+    <TextView
+        android:id="@+id/eventLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location: Latitude, Longitude"
+        android:textSize="14sp" />
+
+</LinearLayout>

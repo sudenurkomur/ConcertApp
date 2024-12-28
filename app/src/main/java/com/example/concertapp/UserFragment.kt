@@ -1,6 +1,5 @@
 package com.example.concertapp
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -15,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.concertapp.api.SupabaseClient
 import com.example.concertapp.databinding.FragmentUserBinding
-import com.example.concertapp.models.DataClass
+import com.example.concertapp.models.Festival
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,7 +26,7 @@ class UserFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     private val binding get() = _binding!!
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var festivalAdapter: FestivalAdapter
-    private val festivalList = mutableListOf<DataClass>()
+    private val festivalList = mutableListOf<Festival>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +63,9 @@ class UserFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
 
         // RecyclerView Ayarı
         binding.festivalRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        festivalAdapter = FestivalAdapter(festivalList)
+        festivalAdapter = FestivalAdapter(festivalList) { selectedFestival ->
+            Toast.makeText(requireContext(), "Selected festival: ${selectedFestival.name}", Toast.LENGTH_SHORT).show()
+        }
         binding.festivalRecyclerView.adapter = festivalAdapter
 
         // Festivalleri Supabase'den çek
@@ -72,10 +73,10 @@ class UserFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     }
 
     private fun fetchFestivals() {
-        SupabaseClient.supabaseService.getFestivals().enqueue(object : Callback<List<DataClass>> {
+        SupabaseClient.supabaseService.getFestivalsWithEvents().enqueue(object : Callback<List<Festival>> {
             override fun onResponse(
-                call: Call<List<DataClass>>,
-                response: Response<List<DataClass>>
+                call: Call<List<Festival>>,
+                response: Response<List<Festival>>
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let { festivals ->
@@ -90,7 +91,7 @@ class UserFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
                 }
             }
 
-            override fun onFailure(call: Call<List<DataClass>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Festival>>, t: Throwable) {
                 Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })

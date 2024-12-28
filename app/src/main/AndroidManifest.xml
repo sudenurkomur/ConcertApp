@@ -28,9 +28,21 @@
         </intent-filter>
         </activity>
 
-        <activity android:name=".AddActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            tools:ignore="Instantiatable" />
+        <activity android:name=".AddFestivalActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+
+        <activity
+            android:name=".FestivalListActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".EventListActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".EditEventActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
 
         <activity android:name=".UploadActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"

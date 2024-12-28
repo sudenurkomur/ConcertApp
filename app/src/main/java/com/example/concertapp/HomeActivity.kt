@@ -10,8 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.concertapp.api.SupabaseClient
-import com.example.concertapp.models.DataClass
-import com.example.navdrawerkotpractice.AdminFragment
+import com.example.concertapp.models.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,44 +20,44 @@ class HomeActivity : AppCompatActivity() {
     @SuppressLint("WrongViewCast", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_home)
+        setContentView(R.layout.fragment_home) // Doğru layout dosyasını bağlayın
 
         // TextView bileşenini buluyoruz
-        val dataNumbers = findViewById<TextView>(R.id.emptyBox)
+        val dataNumbers = findViewById<TextView>(R.id.eventCountTextView) // Doğru ID ile eşleşmeli
 
         // Button bileşenini buluyoruz
         val backButton = findViewById<Button>(R.id.backButton)
 
-        // Supabase'den kullanıcı bilgisi çekme
-        fetchUserCount(dataNumbers)
+        // Etkinlik sayısını Supabase'den çekiyoruz
+        fetchEventCount(dataNumbers)
 
-        // backButton'a tıklama olayını ayarlıyoruz
+        // Geri butonuna tıklama olayını ayarlıyoruz
         backButton.setOnClickListener {
             // AdminFragment'e geçiş yapıyoruz
             navigateToFragment(AdminFragment())
         }
     }
 
-    // Kullanıcı sayısını çekme işlemi
-    private fun fetchUserCount(dataNumbers: TextView) {
-        SupabaseClient.supabaseService.getFestivals()
-            .enqueue(object : Callback<List<DataClass>> {
+    // Etkinlik sayısını çekme işlemi
+    private fun fetchEventCount(dataNumbers: TextView) {
+        SupabaseClient.supabaseService.getEvents() // `getEvents` metodu SupabaseService içinde tanımlı olmalı
+            .enqueue(object : Callback<List<Event>> {
                 override fun onResponse(
-                    call: Call<List<DataClass>>,
-                    response: Response<List<DataClass>>
+                    call: Call<List<Event>>,
+                    response: Response<List<Event>>
                 ) {
                     if (response.isSuccessful) {
                         val events = response.body()
-                        val userCount = events?.size ?: 0
-                        dataNumbers.text = userCount.toString()
+                        val eventCount = events?.size ?: 0
+                        dataNumbers.text = eventCount.toString()
                     } else {
-                        Log.e("SupabaseError", "Failed to fetch users: ${response.errorBody()?.string()}")
+                        Log.e("SupabaseError", "Failed to fetch events: ${response.errorBody()?.string()}")
                         dataNumbers.text = "Error"
                     }
                 }
 
-                override fun onFailure(call: Call<List<DataClass>>, t: Throwable) {
-                    Log.e("SupabaseError", "Failed to fetch users: ${t.message}")
+                override fun onFailure(call: Call<List<Event>>, t: Throwable) {
+                    Log.e("SupabaseError", "Failed to fetch events: ${t.message}")
                     dataNumbers.text = "Error"
                 }
             })
@@ -69,7 +68,7 @@ class HomeActivity : AppCompatActivity() {
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
-        fragmentTransaction.replace(R.id.fragment_container, fragment)
+        fragmentTransaction.replace(R.id.fragment_container, fragment) // `fragment_container` doğru tanımlanmalı
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }

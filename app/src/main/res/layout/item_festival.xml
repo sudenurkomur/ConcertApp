@@ -5,61 +5,36 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@drawable/lavender_border"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    android:background="@drawable/lavender_border">
 
-    <!-- Festival Görseli -->
-    <ImageView
-        android:id="@+id/festivalImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginBottom="8dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/sample_image" /> <!-- Örnek görsel -->
-
-    <!-- Festival Başlığı -->
+    <!-- Festival Adı -->
     <TextView
         android:id="@+id/festivalTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:text="Festival Title" />
+        android:text="Festival Name"
+        android:textColor="@color/black" />
 
-    <!-- Sahne Bilgisi -->
+    <!-- Festival Açıklaması -->
     <TextView
-        android:id="@+id/festivalStage"
+        android:id="@+id/festivalDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:textSize="14sp"
-        android:textColor="@color/black"
-        android:text="Stage Name" />
+        android:text="Festival Description"
+        android:textColor="@color/black" />
 
-    <!-- Şarkıcı Bilgisi -->
+    <!-- Festival Tarihleri -->
     <TextView
-        android:id="@+id/festivalSinger"
+        android:id="@+id/festivalDates"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:textSize="14sp"
-        android:textColor="@color/black"
-        android:text="Singer Name" />
-
-    <!-- Tarih Bilgisi -->
-    <TextView
-        android:id="@+id/festivalTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/black"
-        android:text="Time" />
-
-    <!-- Konum Bilgisi -->
-    <TextView
-        android:id="@+id/festivalLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/black"
-        android:text="Location" />
+        android:text="Start Date - End Date"
+        android:textColor="@color/black" />
 </LinearLayout>

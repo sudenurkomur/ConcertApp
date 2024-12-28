@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -7,31 +6,31 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/festivalName"
+        android:id="@+id/eventTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Festival Name"
+        android:hint="Event Title"
         android:layout_marginBottom="8dp" />
 
     <EditText
-        android:id="@+id/festivalDesc"
+        android:id="@+id/eventStage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Festival Description"
+        android:hint="Stage"
         android:layout_marginBottom="8dp" />
 
     <EditText
-        android:id="@+id/startDate"
+        android:id="@+id/eventSinger"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Start Date (YYYY-MM-DD)"
+        android:hint="Singer"
         android:layout_marginBottom="8dp" />
 
     <EditText
-        android:id="@+id/endDate"
+        android:id="@+id/eventDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="End Date (YYYY-MM-DD)"
+        android:hint="Date"
         android:layout_marginBottom="8dp" />
 
     <Button
@@ -39,4 +38,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:layout_marginTop="8dp" />
 </LinearLayout>

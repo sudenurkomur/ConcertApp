@@ -8,17 +8,13 @@
         <!-- Ana Sayfa -->
         <item
             android:id="@+id/homeFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:icon="@drawable/baseline_home_24"
-            android:title="Home" />
+            android:title="Main Page" />
 
-        <!-- Festival Listesi -->
+        <!-- Festivaller -->
         <item
-            android:id="@+id/festivalsFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/baseline_celebration_24"
+            android:id="@+id/nav_festivals"
+            android:icon="@drawable/baseline_add_24"
             android:title="Festivals" />
     </group>
 
@@ -26,5 +22,5 @@
     <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/baseline_logout_24"
-        android:title="Log Out" />
+        android:title="LogOut" />
 </menu>

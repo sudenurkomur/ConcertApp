@@ -22,7 +22,7 @@ class SignupTabFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentSignupTabBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -56,7 +56,12 @@ class SignupTabFragment : Fragment() {
     }
 
     private fun registerUser(email: String, password: String) {
-        val newUser = User(email = email, password = password)
+        val newUser = User(
+            id = null, // Supabase otomatik olarak bir ID atayacak.
+            email = email,
+            password = password,
+            role = "user" // Varsayılan rol kullanıcı olabilir.
+        )
 
         SupabaseClient.supabaseService.addUser(newUser)
             .enqueue(object : Callback<Void> {

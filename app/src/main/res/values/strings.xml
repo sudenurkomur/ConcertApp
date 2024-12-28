@@ -7,5 +7,6 @@
     <string name="profile_picture">Profile Picture</string>
     <string name="open_drawer">Open Navigation Drawer</string>
     <string name="close_drawer">Close Navigation Drawer</string>
-
+    <string name="add_festival">Add Festival</string>
+    <string name="event_image">Event Image</string>
 </resources>

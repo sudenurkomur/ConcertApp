@@ -1,0 +1,95 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/lavender_border"
+    android:layout_margin="8dp">
+
+    <!-- Etkinlik Görseli -->
+    <ImageView
+        android:id="@+id/eventImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/event_image" />
+
+    <!-- Etkinlik Başlığı -->
+    <TextView
+        android:id="@+id/eventTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:text="Event Title" />
+
+    <!-- Sahne Bilgisi -->
+    <TextView
+        android:id="@+id/eventStage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:text="Stage Name"
+        android:layout_marginTop="4dp" />
+
+    <!-- Şarkıcı Bilgisi -->
+    <TextView
+        android:id="@+id/eventSinger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:text="Singer Name"
+        android:layout_marginTop="4dp" />
+
+    <!-- Tarih Bilgisi -->
+    <TextView
+        android:id="@+id/eventDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:text="Date"
+        android:layout_marginTop="4dp" />
+
+    <!-- Konum Bilgisi -->
+    <TextView
+        android:id="@+id/eventLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:text="Location"
+        android:layout_marginTop="4dp" />
+
+    <!-- Düzenleme ve Silme İşlemleri için Düğmeler -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/editEventButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/lavender"
+            android:textColor="@color/white"
+            android:text="Edit" />
+
+        <Button
+            android:id="@+id/deleteEventButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/red"
+            android:textColor="@color/white"
+            android:text="Delete" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.example.navdrawerkotpractice
+package com.example.concertapp
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,69 +9,63 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import com.example.concertapp.AddActivity
-import com.example.concertapp.HomeActivity
-import com.example.concertapp.LoginFragment
-import com.example.concertapp.R
+import com.example.concertapp.databinding.FragmentAdminBinding
 import com.google.android.material.navigation.NavigationView
-
 
 class AdminFragment : Fragment(R.layout.fragment_admin), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var drawerLayout: DrawerLayout
+    private var _binding: FragmentAdminBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var drawerToggle: ActionBarDrawerToggle
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentAdminBinding.bind(view)
 
-        // DrawerLayout ve diğer bileşenleri fragment içinde başlatıyoruz
-        drawerLayout = view.findViewById(R.id.drawer_layout)
+        // Toolbar ve DrawerLayout ayarları
+        val toolbar: Toolbar = binding.toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
-        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        val drawerLayout = binding.drawerLayout
+        val navView = binding.navView
 
-        val navigationView = view.findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-
-        val toggle = ActionBarDrawerToggle(
-            requireActivity(), drawerLayout, toolbar, R.string.open_nav, R.string.close_nav
+        drawerToggle = ActionBarDrawerToggle(
+            requireActivity(),
+            drawerLayout,
+            toolbar,
+            R.string.open_nav,
+            R.string.close_nav
         )
 
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        drawerLayout.addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
+
+        // NavigationView tıklama olayları
+        navView.setNavigationItemSelectedListener(this)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_logout -> {
-                // Kullanıcı LogOut'a bastığında LoginFragment'e yönlendirilir
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, LoginFragment()) // `fragment_container` ana container ID'si
-                    .addToBackStack(null) // Geri tuşu ile önceki fragment'a dönmek için
-                    .commit()
-            }
             R.id.homeFragment -> {
-                Toast.makeText(requireContext(), "Home Selected", Toast.LENGTH_SHORT).show()
                 val intent = Intent(requireContext(), HomeActivity::class.java)
                 startActivity(intent)
-
             }
-            R.id.addFragment -> {
-                // Add seçildiğinde AddActivity'ye yönlendir
-                val intent = Intent(requireContext(), AddActivity::class.java)
+            R.id.festivalsFragment -> {
+                val intent = Intent(requireContext(), FestivalListActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_logout -> {
+                val intent = Intent(requireContext(), LoginFragment::class.java)
                 startActivity(intent)
             }
         }
-        drawerLayout.closeDrawer(GravityCompat.START)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            requireActivity().onBackPressed() // Activity üzerinden onBackPressed çağrılır
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
     id("kotlin-kapt")
+    id ("kotlin-parcelize")
 }
 
 android {
@@ -73,6 +74,8 @@ dependencies {
     //Image libraries
     implementation("com.github.bumptech.glide:glide:4.15.1")
     kapt("com.github.bumptech.glide:compiler:4.15.1")
+    implementation ("com.squareup.moshi:moshi:1.14.0")
+
 
     // Testing libraries
     testImplementation(libs.junit)
